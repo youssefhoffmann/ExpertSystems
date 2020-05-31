@@ -1,0 +1,124 @@
+//created on: 30 mai 2020
+package com.sample.rules
+
+import com.sample.*
+ 
+
+rule "R1"
+
+    when
+       v: DescriptionExcellenceAcademique( 18==moyenneaubacdesintegres, 10==nbreelevesparenseignant)
+       ac :DescriptionOuvertureInternationale (v.getNomEcole () == nomEcole, niveauanglaisexige =="C1"  )
+       a : Avis ()
+       
+    then
+    System.out.println("Ecole exigente en terme d'entrée");
+       a.setValeur("Ecole exigente en terme d'entrée"); 
+      
+
+end
+
+
+rule "R2"
+
+    when
+       v: DescriptionExcellenceAcademique( 18==moyenneaubacdesintegres, knownprofessor==true)
+       ac :DescriptionOuvertureInternationale (v.getNomEcole () == nomEcole, niveauanglaisexige =="C1"  )
+       a : Avis (v.getNomEcole ()==ecole)
+       
+    then
+       System.out.println("Ecole attractive");
+       a.setValeur("Ecole attractive"); 
+  
+end
+rule "R3" 
+
+   when 
+        v: DescriptionExcellenceAcademique( knownprofessor==true)
+        ac :DescriptionOuvertureInternationale (v.getNomEcole () == nomEcole, dureeminimalealetranger=="6 mois",poucentageetudiantsetrangers==0.5f )
+        a : Avis (v.getNomEcole ()==ecole)
+       
+       
+   then 
+        System.out.println("Ecole tournée vers l'international");
+        a.setValeur("Ecole tournée vers l'international"); 
+end
+
+rule "R4"
+ 
+   when 
+        v: DescriptionExcellenceAcademique( poucentageenseignantshdr==0.3f,nbrepublicationsparan>=72)
+        ac :DescriptionOuvertureInternationale (v.getNomEcole () == nomEcole, niveauanglaisexige =="C1" )
+        a : Avis (v.getNomEcole ()==ecole)
+   then 
+        System.out.println("Ecole qui mise sur la recherche");
+        a.setValeur("Ecole qui mise sur la recherche");
+  
+   
+end
+
+  
+rule "R5" 
+   
+   when 
+        ac : DescriptionProximiteDesEntreprises (ac.getNomEcole () == nomEcole, salairealasortie==50000 )
+        a : Avis (ac.getNomEcole ()==ecole)
+   
+   then 
+       System.out.println("Ecole rentable financièrement");
+       a.setValeur("Ecole rentable financièrement");
+end
+
+rule "R6"
+
+   when 
+      ac: DescriptionProximiteDesEntreprises(nbrealumniauconseildadministrationcac40>=4)
+   then
+      System.out.println("fort");
+      ac.setReseaualumni("fort");
+end
+
+
+
+rule "R8" 
+  
+ 
+ when 
+      v: DescriptionExcellenceAcademique( knownprofessor==true)
+      ac: DescriptionOuvertureInternationale( reputationalinternational=="trés bonne")
+ 	  d: DescriptionExcellenceAcademique( ac.getNomEcole() == v.getNomEcole())
+  
+  
+  then 
+     System.out.println("prestigieuse ecole");
+     v.setTypeecole("prestigieuse ecole");
+    
+end
+
+
+
+rule "R9" 
+   
+when 
+   
+ 
+  v: DescriptionOuvertureInternationale( reputationalinternational=="trés bonne",poucentageetudiantsetrangers==0.5f)
+  
+ then 
+   System.out.println("6 mois");
+   v.setDureeminimalealetranger("6 mois");
+end 
+
+rule "R10" 
+   
+when 
+   
+ 
+  v:DescriptionOuvertureInternationale(scoredeveloppementdurable=="A")
+  
+ then 
+  System.out.println("true");
+   v.setEcoleengagee(true);
+end 
+
+   
